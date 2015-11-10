@@ -19,6 +19,8 @@ namespace NSTraxPlayer
         const int img_width = 30;
         const int img_height = 30;
         const int BMAX = 25;
+        bool is_first = true;
+        Board b = new Board();
 
         public Form1()
         {
@@ -33,12 +35,12 @@ namespace NSTraxPlayer
 
         void initimg()
         {
-            img[1] = new Bitmap(GetType(), "vertical_w.png");
-            img[2] = new Bitmap(GetType(), "horizontal_w.png");
-            img[4] = new Bitmap(GetType(), "upper_left_w.png");
-            img[8] = new Bitmap(GetType(), "lower_right_w.png");
-            img[16] = new Bitmap(GetType(), "upper_right_w.png");
-            img[32] = new Bitmap(GetType(), "lower_left_w.png");
+            img[0x0a] = new Bitmap(GetType(), "vertical_w.png");
+            img[0x05] = new Bitmap(GetType(), "horizontal_w.png");
+            img[0x06] = new Bitmap(GetType(), "upper_left_w.png");
+            img[0x09] = new Bitmap(GetType(), "lower_right_w.png");
+            img[0x03] = new Bitmap(GetType(), "upper_right_w.png");
+            img[0x0c] = new Bitmap(GetType(), "lower_left_w.png");
             canvas = new Bitmap(pictureBox7.Width, pictureBox7.Height);
             g = Graphics.FromImage(canvas);
             pictureBox7.Image = canvas;
@@ -61,6 +63,14 @@ namespace NSTraxPlayer
 
             if(selected_tile != 0)
             {
+                int[] bb = new int[100];
+                int bb_cnt = 0;
+                if (is_first)
+                {
+                    b.first_place(formClientCurPos.X, formClientCurPos.Y, selected_tile);
+                    is_first = false;
+                }
+                else if (b.place(formClientCurPos.X, formClientCurPos.Y, selected_tile, bb, ref bb_cnt) == -1) return;
                 g.DrawImage(img[selected_tile], img_width * formClientCurPos.X, img_height * formClientCurPos.Y);
                 pictureBox7.Refresh();
                 selected_tile = 0;
@@ -82,7 +92,7 @@ namespace NSTraxPlayer
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            selected_tile = 1;
+            selected_tile = 0x0a;
             pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             pictureBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -93,7 +103,7 @@ namespace NSTraxPlayer
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
-            selected_tile = 2;
+            selected_tile = 0x05;
             pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             pictureBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -104,7 +114,7 @@ namespace NSTraxPlayer
 
         private void pictureBox3_Click(object sender, EventArgs e)
         {
-            selected_tile = 8;
+            selected_tile = 0x0c;
             pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             pictureBox3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -115,7 +125,7 @@ namespace NSTraxPlayer
 
         private void pictureBox4_Click(object sender, EventArgs e)
         {
-            selected_tile = 4;
+            selected_tile = 0x09;
             pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             pictureBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -126,7 +136,7 @@ namespace NSTraxPlayer
 
         private void pictureBox5_Click(object sender, EventArgs e)
         {
-            selected_tile = 32;
+            selected_tile = 0x06;
             pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             pictureBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -137,7 +147,7 @@ namespace NSTraxPlayer
 
         private void pictureBox6_Click(object sender, EventArgs e)
         {
-            selected_tile = 16;
+            selected_tile = 0x03;
             pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             pictureBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
