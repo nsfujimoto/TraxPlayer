@@ -8,70 +8,70 @@ namespace NSTraxPlayer
 {
     class Board
     {
-        const int BMAX = 25;
-        const int LIMITTIME = 1000000;
-        const int TSUME_MAX_DEPTH = 7;
-        int MAX_DEPTH = 4;
+        protected const int BMAX = 29;
+        protected const int LIMITTIME = 1000000;
+        protected const int TSUME_MAX_DEPTH = 7;
+        protected int MAX_DEPTH = 4;
 
-        const int BLANK = 0x00;
-        const int RED = 1;
-        const int WHITE = 2;
-        const int RIGHT = 0x01;
-        const int UPPER = 0x02;
-        const int LEFT = 0x04;
-        const int LOWER = 0x08;
-        const int VERTICAL_W = (UPPER | LOWER);    // "+" 1010 0x0a
-        const int HORIZONTAL_W = (RIGHT | LEFT);   // "+" 0101 0x05
-        const int UPPER_LEFT_W = (UPPER | LEFT);  // "/" 0110 0x06
-        const int LOWER_RIGHT_W = (RIGHT | LOWER); // "/" 1001 0x09
-        const int UPPER_RIGHT_W = (RIGHT | UPPER); // "\" 0011 0x03
-        const int LOWER_LEFT_W = (LEFT | LOWER);   // "\" 1100 0x0c
-        const int VW = VERTICAL_W;   //定跡入力用
-        const int HW = HORIZONTAL_W;  //定跡入力用
-        const int ULW = UPPER_LEFT_W;  //定跡入力用
-        const int LRW = LOWER_RIGHT_W; //定跡入力用
-        const int URW = UPPER_RIGHT_W; //定跡入力用
-        const int LLW = LOWER_LEFT_W;  //定跡入力用
-        const int TB = VERTICAL_W;    //定跡入力用
-        const int LR = HORIZONTAL_W;  //定跡入力用
-        const int BL = LOWER_LEFT_W;   //定跡入力用
-        const int BR = LOWER_RIGHT_W;  //定跡入力用
-        const int TL = UPPER_LEFT_W;   //定跡入力用
-        const int TR = UPPER_RIGHT_W;  //定跡入力用
-        const int HASHWIDTH = 0xffffff;
+        protected const int BLANK = 0x00;
+        protected const int RED = 1;
+        protected const int WHITE = 2;
+        protected const int RIGHT = 0x01;
+        protected const int UPPER = 0x02;
+        protected const int LEFT = 0x04;
+        protected const int LOWER = 0x08;
+        protected const int VERTICAL_W = (UPPER | LOWER);    // "+" 1010 0x0a
+        protected const int HORIZONTAL_W = (RIGHT | LEFT);   // "+" 0101 0x05
+        protected const int UPPER_LEFT_W = (UPPER | LEFT);  // "/" 0110 0x06
+        protected const int LOWER_RIGHT_W = (RIGHT | LOWER); // "/" 1001 0x09
+        protected const int UPPER_RIGHT_W = (RIGHT | UPPER); // "\" 0011 0x03
+        protected const int LOWER_LEFT_W = (LEFT | LOWER);   // "\" 1100 0x0c
+        protected const int VW = VERTICAL_W;   //定跡入力用
+        protected const int HW = HORIZONTAL_W;  //定跡入力用
+        protected const int ULW = UPPER_LEFT_W;  //定跡入力用
+        protected const int LRW = LOWER_RIGHT_W; //定跡入力用
+        protected const int URW = UPPER_RIGHT_W; //定跡入力用
+        protected const int LLW = LOWER_LEFT_W;  //定跡入力用
+        protected const int TB = VERTICAL_W;    //定跡入力用
+        protected const int LR = HORIZONTAL_W;  //定跡入力用
+        protected const int BL = LOWER_LEFT_W;   //定跡入力用
+        protected const int BR = LOWER_RIGHT_W;  //定跡入力用
+        protected const int TL = UPPER_LEFT_W;   //定跡入力用
+        protected const int TR = UPPER_RIGHT_W;  //定跡入力用
+        protected const int HASHWIDTH = 0xffffff;
 
 
-        int[] TLIST = new int[6] { VW, HW, ULW, LRW, URW, LLW };
+        protected int[] TLIST = new int[6] { VW, HW, ULW, LRW, URW, LLW };
 
-        int[,] board = new int[BMAX, BMAX];
-        int[,,,] ForceTile = new int[LLW + 1, LLW + 1, LLW + 1, LLW + 1];
-        int[,,,] PlaceableTile = new int[LLW+1, LLW + 1, LLW + 1, LLW + 1];
-        ulong[,,] random_t = new ulong[BMAX, BMAX, LLW + 1];
-        ulong hash;
+        public int[,] board = new int[BMAX, BMAX];
+        protected int[,,,] ForceTile = new int[LLW + 1, LLW + 1, LLW + 1, LLW + 1];
+        protected int[,,,] PlaceableTile = new int[LLW+1, LLW + 1, LLW + 1, LLW + 1];
+        protected ulong[,,] random_t = new ulong[BMAX, BMAX, LLW + 1];
+        protected ulong hash;
 
-        ulong[] HASH_TBL = new ulong[HASHWIDTH + 1];
-        char[] WINLOSS = new char[HASHWIDTH + 1];
-        uint hash_cnt;
+        protected ulong[] HASH_TBL = new ulong[HASHWIDTH + 1];
+        protected char[] WINLOSS = new char[HASHWIDTH + 1];
+        protected uint hash_cnt;
 
-        int x_min, x_max, y_min, y_max;
+        protected int x_min, x_max, y_min, y_max;
         double t1, t2;
-        int max_depth;
-        int ulimit;
-        int use_jouseki = 1;
-        int random_player;
-        int riichi = 0;
+        protected int max_depth;
+        protected int ulimit;
+        protected int use_jouseki = 1;
+        protected int random_player;
+        public int mycolor;
 
-        string[] color_s = new string[3] { "", "RED", "WHITE" };
-        char[] mark = new char[LLW+1] { '\0', '\0', '\0', '\\', '\0', '+', '/', '\0', '\0', '/', '+', '\0', '\\' };
-        string[] b_string = new string[LLW + 1] { " ", "", "", "\\", "", "+", "\x1b[31m/\x1b[0m", "", "", "/", "\x1b[31m+\x1b[0m", "", "\x1b[31m\\\x1b[0m" };
+        protected string[] color_s = new string[3] { "", "RED", "WHITE" };
+        protected char[] mark = new char[LLW+1] { '\0', '\0', '\0', '\\', '\0', '+', '/', '\0', '\0', '/', '+', '\0', '\\' };
+        protected string[] b_string = new string[LLW + 1] { " ", "", "", "\\", "", "+", "\x1b[31m/\x1b[0m", "", "", "/", "\x1b[31m+\x1b[0m", "", "\x1b[31m\\\x1b[0m" };
 
-        int[,] RR = new int[LLW+1, 8]{ {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0},
+        protected int[,] RR = new int[LLW+1, 8]{ {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0},
                             {URW,ULW,LRW,LLW,LLW,LRW,ULW,URW}, {0,0,0,0,0,0,0,0},{ HW, HW, HW, HW, VW, VW, VW, VW},
                             {ULW,URW,LLW,LRW,ULW,URW,LLW,LRW}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0},{LRW,LLW,URW,ULW,LRW,LLW,URW,ULW},
                             { VW, VW, VW, VW, HW, HW, HW, HW}, {0,0,0,0,0,0,0,0},{LLW,LRW,ULW,URW,URW,ULW,LRW,LLW}
                             };
 
-        int[] JOUSEKI_CNT = new int[2] { 28, 30 };
+        protected int[] JOUSEKI_CNT = new int[2] { 28, 30 };
 
 
         public Board()
@@ -81,7 +81,7 @@ namespace NSTraxPlayer
 
 
 
-        void init()
+        protected void init()
         {
             for (int i = 0; i < 13; i++)
             {
@@ -113,7 +113,7 @@ namespace NSTraxPlayer
 
         }
 
-        int popcount(int x)
+        protected int popcount(int x)
         {
             int ret = 0;
             while(x != 0)
@@ -132,7 +132,7 @@ namespace NSTraxPlayer
             place(x, y, tile, bb,ref bb_cnt);
             PlaceableTile[0, 0, 0, 0] = 0;
         }
-        int loop_trace(int x, int y, int color) {
+        protected int loop_trace(int x, int y, int color, ref int riichi) {
             int vec1, vec2, vectmp = 0;
             int is_line_edge = 0;
             int value;
@@ -438,7 +438,7 @@ namespace NSTraxPlayer
             }
             return 0;
         }
-        void initForceTile()
+        protected void initForceTile()
         {
             int i, j, k, l, m;
             int[] t = new int[7]{ 0x00, 0x03, 0x05, 0x06, 0x09, 0x0a, 0x0c };
@@ -512,7 +512,8 @@ namespace NSTraxPlayer
             ulong hash_orig = hash;
 
             if (board[x,y] != BLANK) return -1;
-            if ((PlaceableTile[board[x + 1,y],board[x,y - 1],board[x - 1,y],board[x,y + 1]] & (1 << tile)) != 0)
+            
+            if ((PlaceableTile[board[x + 1,y],board[x,Math.Abs(y - 1)],board[Math.Abs(x - 1),y],board[x,y + 1]] & (1 << tile)) != 0)
             {
                 bb_cnt = 0;
                 if (force_place(x, y, tile, bb, ref bb_cnt) == -1)
@@ -531,7 +532,7 @@ namespace NSTraxPlayer
             return -1;
         }
 
-        int force_place(int x, int y, int tile, int[] bb, ref int bb_cnt)
+        protected int force_place(int x, int y, int tile, int[] bb, ref int bb_cnt)
         {
             int t;
 
