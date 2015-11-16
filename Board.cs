@@ -8,10 +8,10 @@ namespace NSTraxPlayer
 {
     class Board
     {
-        protected const int BMAX = 29;
+        protected const int BMAX = 27;
         protected const int LIMITTIME = 1000000;
         protected const int TSUME_MAX_DEPTH = 7;
-        protected int MAX_DEPTH = 4;
+        public int MAX_DEPTH = 1;
 
         protected const int BLANK = 0x00;
         protected const int RED = 1;
@@ -45,21 +45,24 @@ namespace NSTraxPlayer
 
         public int[,] board = new int[BMAX, BMAX];
         protected int[,,,] ForceTile = new int[LLW + 1, LLW + 1, LLW + 1, LLW + 1];
-        protected int[,,,] PlaceableTile = new int[LLW+1, LLW + 1, LLW + 1, LLW + 1];
+        public int[,,,] PlaceableTile = new int[LLW+1, LLW + 1, LLW + 1, LLW + 1];
         protected ulong[,,] random_t = new ulong[BMAX, BMAX, LLW + 1];
-        protected ulong hash;
+        public ulong hash;
 
         protected ulong[] HASH_TBL = new ulong[HASHWIDTH + 1];
         protected char[] WINLOSS = new char[HASHWIDTH + 1];
         protected uint hash_cnt;
 
-        protected int x_min, x_max, y_min, y_max;
+        public int x_min, x_max, y_min, y_max;
+        public int last_x_min = BMAX/2, last_y_min = BMAX/2;
         double t1, t2;
-        protected int max_depth;
+        public int max_depth;
         protected int ulimit;
         protected int use_jouseki = 1;
         protected int random_player;
         public int mycolor;
+
+        public System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
 
         protected string[] color_s = new string[3] { "", "RED", "WHITE" };
         protected char[] mark = new char[LLW+1] { '\0', '\0', '\0', '\\', '\0', '+', '/', '\0', '\0', '/', '+', '\0', '\\' };
@@ -72,6 +75,8 @@ namespace NSTraxPlayer
                             };
 
         protected int[] JOUSEKI_CNT = new int[2] { 28, 30 };
+
+        Random rr = new Random();
 
 
         public Board()
@@ -100,7 +105,7 @@ namespace NSTraxPlayer
 
             initForceTile();
 
-            x_min = y_min = BMAX/2 + 1;
+            x_min = y_min = last_x_min = last_y_min = BMAX/2 + 1;
             x_max = y_max = BMAX/2;
 
             for(int i = 0; i < BMAX; i++)
@@ -110,7 +115,6 @@ namespace NSTraxPlayer
                     board[i, j] = 0;
                 }
             }
-
         }
 
         protected int popcount(int x)
@@ -510,6 +514,8 @@ namespace NSTraxPlayer
         {
             int i;
             ulong hash_orig = hash;
+            last_x_min = x_min;
+            last_y_min = y_min;
 
             if (board[x,y] != BLANK) return -1;
             
@@ -567,7 +573,78 @@ namespace NSTraxPlayer
             return 0;
         }
 
+        public string xxyyt_to_string(int xx, int yy, int t)
+        {
+            string s;
 
+            if (xx == 0)
+            {
+                s = "@";
+            }
+            else if (xx <= 26)
+            {
+                s = ((char)('A' + xx - last_x_min)).ToString();
+            }
+            else
+            {
+                s = ('A' + ((xx - last_x_min) / 26) - 1).ToString();
+                s = ('A' + ((xx - last_x_min) % 26)).ToString();
+            }
+            s += (yy - last_y_min+1).ToString();
+            if (t == VERTICAL_W || t == HORIZONTAL_W) s += "+";
+            else if (t == UPPER_LEFT_W || t == LOWER_RIGHT_W) s += "/";
+            else s += "\\";
+            return s;
+        }
 
+        public void random_place(ref int xx, ref int yy, ref int tt, int color)
+        {
+            int i, j, x, y, t;
+            int x_min_backup = x_min;
+            int x_max_backup = x_max;
+            int y_min_backup = y_min;
+            int y_max_backup = y_max;
+            ulong hash_backup = hash;
+            int[] px = new int[10000];
+            int[] py = new int[10000];
+            int[] pt = new int[10000];
+            int p_cnt = 0;
+            int[] bb = new int[256];
+            int bb_cnt = 0 , riichi = 0;
+
+            for (y = y_min - 1; y <= y_max + 1; y++)
+            {
+                for (x = x_min - 1; x <= x_max + 1; x++)
+                {
+                    if (board[x,y] != 0) continue;
+                    if ((board[x - 1,y] | board[x + 1,y] | board[x,y - 1] | board[x,y + 1]) != 0)
+                    {
+                        for (i = 0; i < 6; i++)
+                        {
+                            t = TLIST[i];
+                            if (place(x, y, t, bb, ref bb_cnt) == 1)
+                            {
+                                if (loop_trace(x, y, 3 - color, ref riichi) == 0)
+                                {
+                                    px[p_cnt] = x;
+                                    py[p_cnt] = y;
+                                    pt[p_cnt++] = t;
+                                }
+                                for (j = 0; j < bb_cnt; j++) board[bb[j] >> 10,bb[j] & 0x3ff] = 0;
+                                hash = hash_backup;
+                                x_min = x_min_backup;
+                                x_max = x_max_backup;
+                                y_min = y_min_backup;
+                                y_max = y_max_backup;
+                            }
+                        }
+                    }
+                }
+            }
+            int r = rr.Next() % p_cnt;
+            xx = px[r];
+            yy = py[r];
+            tt = pt[r];
+        }
     }
 }

@@ -44,20 +44,54 @@ namespace NSTraxPlayer
             }
         }
 
-        public int search_place(ref int x, ref int y, ref int tile, int color)
+        public int search_place(ref int x, ref int y, ref int t, int color)
         {
             int[] bb = new int[256];
             int bb_cnt = 0;
             max_depth = 1;
-            if(search(ref x, ref y, ref tile, color, 1) == color)
+            int time;
+            int ret;
+            if (search(ref x, ref y, ref t, color, 1) == color)
             {
-                place(x, y, tile, bb, ref bb_cnt);
+                place(x, y, t, bb, ref bb_cnt);
                 return 1;
             }
-            max_depth = 4;
+
             hash_cnt = 0;
-            search(ref x, ref y, ref tile, color, 1);
-            place(x, y, tile, bb,ref bb_cnt);
+            sw.Reset();
+            sw.Start();
+            for (max_depth = 1; max_depth <= MAX_DEPTH; max_depth++)
+            {
+                ret = search(ref x, ref y, ref t, color, 1);
+                time = (int)sw.ElapsedMilliseconds;
+                if (ret == color)
+                {
+                    place(x, y, t, bb, ref bb_cnt);
+                    return 0;
+                }
+                else if (ret == 3 - color)
+                {
+                    random_place(ref x, ref y, ref t, color);
+                    place(x, y, t, bb, ref bb_cnt);
+                }
+
+                else if (time > 3000)
+                {
+                    place(x, y, t, bb, ref bb_cnt);
+                    return 0;
+                }
+
+            }
+
+            /*
+            else
+            {
+                random_place(ref rx, ref ry, ref rt, color);
+                place(x, y, t, bb, ref bb_cnt);
+            }
+            */
+            sw.Stop();
+            place(x, y, t, bb, ref bb_cnt);
             return 0;
         }
 
@@ -154,8 +188,8 @@ namespace NSTraxPlayer
             {
                 for (x = x_min - 1; x <= x_max + 1; x++)
                 {
-                    if (x < 2 || x > 26) continue;
-                    if (y < 2 || y > 26) continue;
+                    if (x < 2 || x > 24) continue;
+                    if (y < 2 || y > 24) continue;
                     if (board[x,y] != 0) continue;
                     if ((board[x - 1,y] | board[x + 1,y] | board[x,y - 1] | board[x,y + 1]) != 0)
                     {

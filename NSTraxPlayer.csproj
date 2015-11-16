@@ -32,6 +32,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>trax_icon2.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Win32Resource>
+    </Win32Resource>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,9 +63,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="history.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StrongPlayer.cs" />
+    <Compile Include="TumeAI.cs" />
+    <Compile Include="ViewBoard.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -107,6 +120,25 @@
     <EmbeddedResource Include="upper_left_w.png" />
     <EmbeddedResource Include="upper_right_w.png" />
     <EmbeddedResource Include="vertical_w.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="bhorizontal_w.png" />
+    <EmbeddedResource Include="blower_left_w.png" />
+    <EmbeddedResource Include="blower_right_w.png" />
+    <EmbeddedResource Include="bupper_left_w.png" />
+    <EmbeddedResource Include="bupper_right_w.png" />
+    <EmbeddedResource Include="bvertical_w.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="bBLW.png" />
+    <EmbeddedResource Include="bBRW.png" />
+    <EmbeddedResource Include="bHW.png" />
+    <EmbeddedResource Include="bTLW.png" />
+    <EmbeddedResource Include="bTRW.png" />
+    <EmbeddedResource Include="bVW.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="trax_icon2.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
