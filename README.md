@@ -1,4 +1,3 @@
-test
 # AI付きTraxPlayer
 
 ## Trax とは
