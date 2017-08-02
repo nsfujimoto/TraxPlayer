@@ -19,15 +19,15 @@ NSTraxPlayer.exe を実行すると最初に上記画像の画面が開かれま
 
 プレイヤーのターンになったならば、配置するタイルの種類を右下から選択し、すでに配置されているタイルに隣接するマスをクリックしてください。これでプレイヤーターンは終了し、次手をCPUが自動で配置します。
 
-![end](Readme_picture/end.png)
+![end](Readme_picture/END.PNG)
 
 勝敗が決すると、ポップアップが表示されます。
 
-![log](Readme_picture/log.png)
+![log](Readme_picture/log.PNG)
 
 右上窓に出力されているものは、Trax Notationと呼ばれるTraxの棋譜です。
 
-![難易度](Readme_picture/ai.png)
+![難易度](Readme_picture/AI.png)
 
 menu > AIの強さ からAIの強さを指定することができます。強くするほど思考時間が長くなるため、もっと強いは指定しないほうがいいです。
 
