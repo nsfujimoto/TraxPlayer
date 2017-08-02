@@ -27,7 +27,7 @@ NSTraxPlayer.exe を実行すると最初に上記画像の画面が開かれま
 
 右上窓に出力されているものは、Trax Notationと呼ばれるTraxの棋譜です。
 
-![難易度](Readme_picture/AI.png)
+![難易度](Readme_picture/ai.png)
 
 menu > AIの強さ からAIの強さを指定することができます。強くするほど思考時間が長くなるため、もっと強いは指定しないほうがいいです。
 
